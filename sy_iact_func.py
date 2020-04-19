@@ -30,16 +30,17 @@
 					3. day_parser (directory)
 					4. BSM_parser (directory)
 
-6. Processing tools			1. raw_file_to_txt (file_to_process)
-					2. txt_head_cleaner (file_to_process)
-					3. txt_head_parser (head_to_process)
-					4. txt_to_amplitudes (file_to_process)
-					5. get_quick_pedestals (file_to_process)
-					6. get_cleaned_quick_pedestal (file_to_process)
-					7. get_precise_pedestals (file_to_process)
-					8. amplitudes_minus_pedestals (file_to_process, file_of_pedestals)
-					9. amplitudes_to_photoelectrons (file_to_process, file_with_pe_codes_and_rel_sensitives)
-					10. 
+6. Processing tools			1. process_single_file (file_to_process)
+					2. raw_file_to_txt (file_to_process)
+					3. txt_head_cleaner (file_to_process)
+					4. txt_head_parser (head_to_process)
+					5. txt_to_amplitudes (file_to_process)
+					6. get_quick_pedestals (file_to_process)
+					7. get_cleaned_quick_pedestal (file_to_process)
+					8. get_precise_pedestals (file_to_process)
+					9. amplitudes_minus_pedestals (file_to_process, file_of_pedestals)
+					10. amplitudes_to_photoelectrons (file_to_process, file_with_pe_codes_and_rel_sensitives)
+					11. 
 
 7. Analyze tools			1. 
 					2. 
@@ -159,11 +160,11 @@ def to_process_answer_in_processing_menu (answer):
 	if (answer != "1" and answer != "2" and answer != "3" and answer != "4" and answer != "5" and answer != "6" and answer != "7" and answer != "0"):
 		print("It seems that you've made the mistake. Please, try again:")
 		to_process_answer_in_processing_menu (answer)
-#	elif answer == "1": pass #couple_days
-#	elif answer == "2": pass #one_day
-#	elif answer == "3": pass #one_BSM from one day
-#	elif answer == "4": pass #one_file
-#	elif answer == "5": pass #couple_of_files
+	elif answer == "1": pass #couple_days
+	elif answer == "2": pass #one_day
+	elif answer == "3": pass #one_BSM from one day
+	elif answer == "4": pass #one_file
+	elif answer == "5": pass #couple_of_files
 	elif answer == "6": main_menu ()
 	elif answer == "7": mess_destroyer (2)
 	elif answer == "0": quit ()
@@ -320,11 +321,13 @@ def parser (answer2, answer3):
 
 	files_list = open (script_dir + "/.files_list.txt", "tw", encoding="utf-8")
 	mess_file = open (script_dir + "/.mess.txt", "tw", encoding="utf-8")
-	mess_file.write ("Made temporary file:  " + script_dir + "/.files_list.txt\n")
+	mess_file.write ("Made temporary file:  " + script_dir + "/.files_list.txt")
 	mess_file.close ()
 
 	dir_pattern = re.compile("^BSM\d{2}$")
 	file_pattern = re.compile("^\d{8}\.\d{3}")
+
+#to process one file
 
 	if answer2 == 4: #OK
 
@@ -337,6 +340,8 @@ def parser (answer2, answer3):
 		files_list.write(abs_file_path)
 		
 		print ("The list of files to process was made. It's in the script directory under the name  .files_list.txt\n")
+
+#to process a couple of files
 
 	elif answer2 == 5: #OK
 		print (
@@ -355,6 +360,8 @@ def parser (answer2, answer3):
 			files_list.write (abs_file_path + "\n")
 
 		print ("The list of files to process was made. It's in the script directory under the name  .files_list.txt\n")
+
+#to process one day
 
 	elif answer2 == 2: #OK
 		
@@ -376,6 +383,8 @@ def parser (answer2, answer3):
 			files_list.write('\n')
 
 		print ("The list of files to process was made. It's in the script directory under the name  .files_list.txt\n")
+
+#to process one BSM from one day
 			
 	elif answer2 == 3: #OK
 
@@ -393,6 +402,8 @@ def parser (answer2, answer3):
 		files_list.write ('\n'.join ([(abs_BSM_path + "/" + x) for x in list_of_files.split()]))
 
 		print ("The list of files to process was made. It's in the script directory under the name  .files_list.txt\n")
+
+#to process a couple of days
 
 	elif answer2 == 1: #NOT CHECKED!!!
 		print (
@@ -424,18 +435,22 @@ def parser (answer2, answer3):
 
 	files_list.close()
 
+#To create ONLY the list of files to process and not to process them.\n
+
 	if answer3 == 3:
-		print ("The list of files to process was made. It's in the script directory under the name  .files_list.txt\n")
+#		print ("The list of files to process was made. It's in the script directory under the name  .files_list.txt\n")
 		main_menu ()
 
-	if answer3 == 4:
+#To create the list of  files to process and not to process it. + To create the gypothetical list of temporary files
+
+	elif answer3 == 4:
 		print ("The list of temporary files are compiling...\n")
 		mess_file = open (script_dir + "/.mess.txt", "tw", encoding="utf-8")
 		files_list = open (script_dir + "/.files_list.txt", "r")
 		for line in files_list:
-			mess_file.write ("Made temporary file:  " + line + ".txt\n")
-			mess_file.write ("Made temporary file:  " + line + ".whd\n")
-			mess_file.write ("Made temporary file:  " + line + ".amp\n")
+			mess_file.write ("Made temporary file:  " + line[:-2] + ".txt\n")
+			mess_file.write ("Made temporary file:  " + line[:-2] + ".whd\n")
+			mess_file.write ("Made temporary file:  " + line[:-2] + ".amp\n")
 #			mess_file.write ("Made temporary file:  " + line + ".pes\n")
 #			mess_file.write ("Made temporary file:  " + line + ".qpd\n")
 #			mess_file.write ("Made temporary file:  " + line + ".fpd\n")
